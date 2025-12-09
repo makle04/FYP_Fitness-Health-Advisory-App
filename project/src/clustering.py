@@ -1,12 +1,21 @@
-from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 
-# Train K-Means
-def run_kmeans(data, k):
-    # Indent everything inside the function
-    model = KMeans(n_clusters=k, random_state=42)
+def run_dbscan(data, eps=0.3, min_samples=5):
+    """
+    DBSCAN clustering
+    :param data: scaled (and optionally PCA-transformed) numeric data
+    :param eps: neighborhood radius
+    :param min_samples: minimum points to form a cluster
+    :return: cluster labels, DBSCAN model, silhouette score (if applicable)
+    """
+    model = DBSCAN(eps=eps, min_samples=min_samples)
     labels = model.fit_predict(data)
-    
-    score = silhouette_score(data, labels)
-    
+
+    # Only compute silhouette if more than 1 cluster is found
+    if len(set(labels)) > 1 and -1 not in set(labels):
+        score = silhouette_score(data, labels)
+    else:
+        score = None  # silhouette not meaningful
+
     return labels, model, score
