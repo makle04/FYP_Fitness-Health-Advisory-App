@@ -1,10 +1,19 @@
-def give_recommendation(cluster_id):
-    rec = {
-        0: "Cluster 0: Low activity. Increase daily steps + start light exercise 3x/week.",
-        1: "Cluster 1: Moderate activity. Add strength training + hydration tracking.",
-        2: "Cluster 2: High performers. Focus on recovery, HIIT balancing, and sleep quality.",
-        3: "Cluster 3: High BMI + moderate activity. Improve diet, start cardio + resistance combo.",
-        4: "Cluster 4: Balanced fitness. Maintain routine, monitor heart rate improvements."
-    }
+def generate_recommendations(df):
+    cluster_means = df.groupby("cluster").mean(numeric_only=True)
 
-    return rec.get(cluster_id, "No recommendation available.")
+    def recommend(row):
+        cluster = row["cluster"]
+
+        if cluster == -1:
+            return "General fitness improvement recommended."
+
+        intensity = cluster_means.loc[cluster, "Intensity"]
+
+        if intensity >= 0.7:
+            return "High-intensity training with focus on recovery and hydration."
+        elif intensity >= 0.4:
+            return "Balanced cardio and strength training program."
+        else:
+            return "Low-impact cardio with emphasis on consistency."
+
+    return df.apply(recommend, axis=1)
