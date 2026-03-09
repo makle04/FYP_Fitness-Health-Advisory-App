@@ -1,8 +1,8 @@
 import numpy as np
 
 MIN_CLUSTERS = 3
-MAX_CLUSTERS = 10
-MAX_NOISE_RATIO = 0.35
+MAX_CLUSTERS = 15
+MAX_NOISE_RATIO = 0.55
 
 def clustering_score(labels):
     total = len(labels)
