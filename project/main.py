@@ -130,7 +130,12 @@ def main():
     X = train_df[FEATURES]
     y = train_df["cluster"]
 
-    model = RandomForestClassifier(n_estimators=200, random_state=42)
+    model = RandomForestClassifier(
+    n_estimators=400,
+    max_depth=10,
+    min_samples_split=10,
+    random_state=42
+)
     model.fit(X, y)
 
     joblib.dump(model, MODEL_PATH)
