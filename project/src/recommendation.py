@@ -1,31 +1,22 @@
 def generate_recommendations(df):
 
-    # Cluster groups
-    beginner_clusters = [3, 4]
-    moderate_clusters = [0, 2, 6, 10]
-    endurance_clusters = [5, 7, 8]
-    hiit_clusters = [1, 9]
+    cluster_recommendations = {
 
-    def recommend(cluster):
+        -1: "General fitness improvement recommended.",
 
-        if cluster == -1:
-            return "General fitness improvement recommended."
+        0: "Balanced beginner workout focusing on light cardio and basic strength exercises.",
+        1: "High-intensity interval training with explosive movements and adequate recovery.",
+        2: "Moderate cardio combined with full-body resistance training.",
+        3: "Beginner-friendly workouts focusing on mobility, flexibility, and light cardio.",
+        4: "Low-impact exercises such as walking, cycling, or swimming to build endurance gradually.",
+        5: "Longer endurance sessions such as steady-state running or cycling.",
+        6: "Strength-focused workouts combined with moderate cardio training.",
+        7: "Endurance conditioning with emphasis on pacing and aerobic capacity.",
+        8: "Cardio-heavy endurance training with longer duration activities.",
+        9: "Advanced HIIT training including sprint intervals and circuit strength training.",
+        10: "Mixed training plan combining cardio, resistance training, and functional fitness."
+    }
 
-        elif cluster in beginner_clusters:
-            return "Beginner-friendly workouts focusing on light cardio, mobility, and building consistency."
-
-        elif cluster in moderate_clusters:
-            return "Balanced cardio and strength training routine for steady and sustainable fitness improvement."
-
-        elif cluster in endurance_clusters:
-            return "Endurance-focused training with longer cardio sessions and attention to pacing and recovery."
-
-        elif cluster in hiit_clusters:
-            return "High-intensity interval training with strength conditioning and proper recovery."
-
-        else:
-            return "General fitness training plan."
-
-    df["recommendation"] = df["cluster"].apply(recommend)
+    df["recommendation"] = df["cluster"].map(cluster_recommendations)
 
     return df["recommendation"]
