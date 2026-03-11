@@ -1,19 +1,30 @@
 def generate_recommendations(df):
-    cluster_means = df.groupby("cluster").mean(numeric_only=True)
 
-    def recommend(row):
-        cluster = row["cluster"]
+    cluster_recommendations = {
 
-        if cluster == -1:
-            return "General fitness improvement recommended."
+        # Outliers
+        -1: "General fitness improvement recommended.",
 
-        intensity = cluster_means.loc[cluster, "Intensity"]
+        # Beginner / low intensity
+        3: "Beginner-friendly workouts focusing on building consistency with light cardio and mobility training.",
+        4: "Low-impact endurance exercises such as walking, cycling, or swimming.",
 
-        if intensity >= 0.7:
-            return "High-intensity training with focus on recovery and hydration."
-        elif intensity >= 0.4:
-            return "Balanced cardio and strength training program."
-        else:
-            return "Low-impact cardio with emphasis on consistency."
+        # Moderate balanced workouts
+        0: "Balanced cardio and strength training routine to maintain overall fitness.",
+        2: "Moderate cardio workouts combined with resistance training for steady progress.",
+        6: "Mixed cardio and strength sessions to improve overall conditioning.",
+        10: "Consistent moderate workouts focusing on sustainable long-term fitness.",
 
-    return df.apply(recommend, axis=1)
+        # Endurance athletes
+        5: "Long endurance training sessions with focus on hydration and pacing.",
+        7: "Extended cardio sessions designed to improve stamina and aerobic capacity.",
+        8: "Endurance-based workouts with emphasis on pacing strategies and recovery.",
+
+        # High intensity athletes
+        1: "High-intensity interval training with proper recovery and hydration.",
+        9: "Advanced high-calorie burning workouts combining HIIT and strength conditioning."
+    }
+
+    df["recommendation"] = df["cluster"].map(cluster_recommendations)
+
+    return df["recommendation"]
