@@ -7,6 +7,7 @@ from src.feature_engineering import add_engineered_features
 from src.recommendation import generate_recommendations
 
 MODEL_PATH = "project/models/cluster_model.pkl"
+SCALER_PATH = "project/models/scaler.pkl"
 
 FEATURES = [
     "Age",
@@ -22,8 +23,9 @@ FEATURES = [
 app = Flask(__name__)
 CORS(app)
 
-# Load trained classifier
+# Load model and scaler
 model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
 
 
 @app.route("/")
@@ -38,19 +40,23 @@ def predict():
 
     df = pd.DataFrame([data])
 
-    # Convert everything to numeric
+    # Convert to numeric
     df = df.apply(pd.to_numeric, errors="coerce")
 
     # Feature engineering
     df = add_engineered_features(df)
 
-    # Remove infinity values
+    # Remove infinity
     df.replace([float("inf"), -float("inf")], 0, inplace=True)
 
     # Fill missing values
     df.fillna(0, inplace=True)
 
-    cluster = model.predict(df[FEATURES])[0]
+    # Scale features
+    X_scaled = scaler.transform(df[FEATURES])
+
+    # Predict cluster
+    cluster = model.predict(X_scaled)[0]
 
     df["cluster"] = cluster
 
@@ -60,6 +66,7 @@ def predict():
         "cluster": int(cluster),
         "recommendation": recommendation
     })
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -8,7 +8,7 @@ from src.preprocessing import (
     load_data,
     standardise_columns,
     validate_columns,
-    clean_and_scale
+    clean_numeric
 )
 from src.feature_engineering import add_engineered_features
 from src.pruning import prune_unrealistic_records
@@ -64,7 +64,7 @@ def main():
 
     df = df[df["Calories_Burned"] < df["Calories_Burned"].quantile(0.99)]
 
-    df = clean_and_scale(df, FEATURES)
+    df = clean_numeric(df, FEATURES)
 
     best_score = -1
     best_labels = None
