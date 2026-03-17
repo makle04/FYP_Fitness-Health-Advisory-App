@@ -1,83 +1,153 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Home from "./home";
+import Fitness from "./fitness";
+import Diet from "./diet";
+import logo from "./land_title.png";
 
 function App() {
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    Age: "",
-    Weight_kg: "",
-    Height_m: "",
-    Session_Duration_hours: "",
-    Calories_Burned: "",
-    Max_BPM: "",
-    Resting_BPM: "",
-    Avg_BPM: "",
-    Water_Intake_liters: ""
-  });
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const [result, setResult] = useState(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setScrollProgress(Math.min(scrollY / 150, 1));
+    };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const styles = {
+    app: {
+      minHeight: "100vh",
+      background: `
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.3), transparent 40%),
+        linear-gradient(135deg, #667eea, #764ba2)
+      `
+    },
 
-    const payload = {};
+    logoImg: {
+      height: `${80 - scrollProgress * 20}px`,
+      objectFit: "contain",
+      cursor: "pointer",
+      transform: `scale(${1 - scrollProgress * 0.2}) translateY(${scrollProgress * -8}px)`,
+      opacity: 1 - scrollProgress * 0.4,
+      transition: "all 0.2s ease"
+    },
 
-    Object.keys(formData).forEach((key) => {
-      payload[key] = Number(formData[key]);
-    });
+    logoFloating: {
+      position: "fixed",
+      top: "0px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      zIndex: 1100,
+      padding: "6px 12px",
 
-    const response = await fetch("http://localhost:5000/predict", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+      background: `rgba(255,255,255,${0.2 + scrollProgress * 0.4})`,
+      backdropFilter: `blur(${scrollProgress * 12}px)`,
 
-    const data = await response.json();
-    setResult(data);
+      borderRadius: "0 0 12px 12px",
+      transition: "all 0.2s ease"
+    },
+
+    navbar: {
+      position: "fixed",
+      top: 30,
+      left: "20px",
+      padding: "10px 16px",
+      borderRadius: "16px",
+
+      background: `rgba(255,255,255,${0.2 + scrollProgress * 0.4})`,
+      backdropFilter: `blur(${scrollProgress * 12}px)`,
+
+      display: "flex",
+      alignItems: "center",
+
+      boxShadow:
+        scrollProgress > 0.2
+          ? "0 8px 20px rgba(0,0,0,0.2)"
+          : "none",
+
+      transition: "all 0.2s ease",
+      zIndex: 1000
+    },
+
+    navLeft: {
+      display: "flex",
+      gap: "16px"
+    },
+
+    navBtn: {
+      padding: "8px 14px",
+      borderRadius: "8px",
+      border: "none",
+      background: "rgba(255,255,255,0.4)",
+      color: "#1f2937",
+      cursor: "pointer",
+      transition: "0.2s"
+    },
+
+    content: {
+      paddingTop: "100px"
+    }
   };
 
   return (
-    <div style={{padding:"40px", fontFamily:"Arial"}}>
-      <h1>Fitness Health Advisory System</h1>
+    <div style={styles.app}>
 
-      <form onSubmit={handleSubmit}>
+      {/* 🔥 NAVBAR */}
+      <nav style={styles.navbar}>
+        <div style={styles.navLeft}>
+          <button
+            style={styles.navBtn}
+            onClick={() => navigate("/fitness")}
+            onMouseOver={(e) =>
+              (e.target.style.background = "rgba(255,255,255,0.9)")
+            }
+            onMouseOut={(e) =>
+              (e.target.style.background = "rgba(255,255,255,0.4)")
+            }
+          >
+            Fitness
+          </button>
 
-        <input name="Age" placeholder="Age" onChange={handleChange} /><br/><br/>
-
-        <input name="Weight_kg" placeholder="Weight (kg)" onChange={handleChange} /><br/><br/>
-
-        <input name="Height_m" placeholder="Height (m)" onChange={handleChange} /><br/><br/>
-
-        <input name="Session_Duration_hours" placeholder="Workout Duration (hours)" onChange={handleChange} /><br/><br/>
-
-        <input name="Calories_Burned" placeholder="Calories Burned" onChange={handleChange} /><br/><br/>
-
-        <input name="Max_BPM" placeholder="Max BPM" onChange={handleChange} /><br/><br/>
-
-        <input name="Resting_BPM" placeholder="Resting BPM" onChange={handleChange} /><br/><br/>
-
-        <input name="Avg_BPM" placeholder="Average BPM" onChange={handleChange} /><br/><br/>
-
-        <input name="Water_Intake_liters" placeholder="Water Intake (liters)" onChange={handleChange} /><br/><br/>
-
-        <button type="submit">Get Recommendation</button>
-
-      </form>
-
-      {result && (
-        <div style={{marginTop:"30px"}}>
-          <h2>Cluster: {result.cluster}</h2>
-          <h3>{result.recommendation}</h3>
+          <button
+            style={styles.navBtn}
+            onClick={() => navigate("/diet")}
+            onMouseOver={(e) =>
+              (e.target.style.background = "rgba(255,255,255,0.9)")
+            }
+            onMouseOut={(e) =>
+              (e.target.style.background = "rgba(255,255,255,0.4)")
+            }
+          >
+            Diet Plans
+          </button>
         </div>
-      )}
+      </nav>
+
+      {/* 🔥 LOGO → HOME */}
+      <div style={styles.logoFloating}>
+        <img
+          src={logo}
+          alt="FitSense AI"
+          style={styles.logoImg}
+          onClick={() => navigate("/")}
+        />
+      </div>
+
+      {/* 🔥 ROUTES */}
+      <div style={styles.content}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/fitness" element={<Fitness />} />
+          <Route path="/diet" element={<Diet />} />
+        </Routes>
+      </div>
 
     </div>
   );
