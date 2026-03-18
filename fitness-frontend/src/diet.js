@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
 function Diet() {
@@ -8,115 +8,124 @@ function Diet() {
   const [goal, setGoal] = useState("");
   const [plan, setPlan] = useState(null);
 
-  // ✅ Auto-fill from Fitness page
-  useEffect(() => {
-    if (location.state?.type === "high") setGoal("gain");
-    if (location.state?.type === "moderate") setGoal("maintain");
-    if (location.state?.type === "low") setGoal("loss");
-  }, [location]);
+  const calculateDiet = useCallback((inputGoal) => {
+    const selectedGoal = inputGoal || goal;
 
-  // ✅ Generate smart diet plan
-  const generatePlan = () => {
-    let dietPlan = "";
-    let calories = "";
-    let protein = "";
-    let carbs = "";
-    let fats = "";
-    let explanation = "";
+    const weight = Number(location.state?.weight);
+    const height = Number(location.state?.height) * 100;
+    const age = Number(location.state?.age);
 
-    if (goal === "loss") {
-      calories = "1800 - 2200 kcal";
-      protein = "120 - 150g";
-      carbs = "150 - 200g";
-      fats = "50 - 70g";
+    if (!weight || !height || !age) return;
 
-      explanation = "You are targeting fat loss. A calorie deficit with high protein will help preserve muscle while reducing body fat.";
+    const BMR = 10 * weight + 6.25 * height - 5 * age + 5;
 
-      dietPlan = `
-Focus: Calorie deficit, high protein
+    let activityMultiplier = 1.4;
+    if (location.state?.type === "high") activityMultiplier = 1.75;
+    if (location.state?.type === "moderate") activityMultiplier = 1.55;
+    if (location.state?.type === "low") activityMultiplier = 1.3;
 
-Breakfast:
-- Oats with eggs or yogurt
+    const TDEE = Math.round(BMR * activityMultiplier);
 
-Lunch:
-- Grilled chicken or fish with vegetables
+    let targetCalories = TDEE;
+    if (selectedGoal === "loss") targetCalories -= 400;
+    if (selectedGoal === "gain") targetCalories += 400;
 
-Dinner:
-- Lean protein with salad
+    const protein = Math.round(weight * 2);
+    const fats = Math.round(weight * 0.8);
+    const carbs = Math.round((targetCalories - (protein * 4 + fats * 9)) / 4);
 
-Snacks:
+    const explanation = `
+Your estimated BMR is ${Math.round(BMR)} kcal/day.
+
+Based on your activity level, your daily energy expenditure (TDEE) is about ${TDEE} kcal.
+
+For your goal (${selectedGoal}), your recommended intake is ${targetCalories} kcal/day.
+    `;
+
+    let meals = "";
+
+    if (selectedGoal === "loss") {
+      meals = `
+🍳 Breakfast:
+- Oats + boiled eggs / Greek yogurt
+
+🍗 Lunch:
+- Grilled chicken + vegetables + small rice
+
+🥗 Dinner:
+- Salad + lean protein (fish/chicken)
+
+🥜 Snacks:
 - Fruits, nuts
 
-Avoid:
+🚫 Avoid:
 - Sugary drinks, fried food
       `;
     }
 
-    if (goal === "gain") {
-      calories = "2500 - 3000 kcal";
-      protein = "150 - 180g";
-      carbs = "300 - 400g";
-      fats = "70 - 90g";
-
-      explanation = "You are aiming for muscle gain. A calorie surplus with sufficient protein supports muscle growth and recovery.";
-
-      dietPlan = `
-Focus: Calorie surplus, high protein
-
-Breakfast:
+    if (selectedGoal === "gain") {
+      meals = `
+🍳 Breakfast:
 - Eggs, toast, milk
 
-Lunch:
-- Chicken rice with vegetables
+🍗 Lunch:
+- Chicken rice / beef + rice + veggies
 
-Dinner:
-- Beef or chicken with carbs
+🍝 Dinner:
+- Pasta / rice + protein
 
-Snacks:
-- Peanut butter, protein shakes
+🥤 Snacks:
+- Peanut butter sandwich, protein shake
 
-Include:
-- More carbs and healthy fats
+✅ Include:
+- More carbs + healthy fats
       `;
     }
 
-    if (goal === "maintain") {
-      calories = "2000 - 2500 kcal";
-      protein = "100 - 140g";
-      carbs = "200 - 300g";
-      fats = "60 - 80g";
+    if (selectedGoal === "maintain") {
+      meals = `
+🍳 Breakfast:
+- Eggs + whole grain toast
 
-      explanation = "You are maintaining your current physique. Balanced nutrition ensures energy stability and long-term health.";
+🍗 Lunch:
+- Balanced meal (protein + carbs + veg)
 
-      dietPlan = `
-Focus: Balanced nutrition
+🥗 Dinner:
+- Light protein + vegetables
 
-Breakfast:
-- Eggs and whole grains
-
-Lunch:
-- Protein + carbs + vegetables
-
-Dinner:
-- Light protein with vegetables
-
-Snacks:
+🍎 Snacks:
 - Fruits, yogurt
 
-Maintain:
-- Consistent calorie intake
+⚖️ Maintain:
+- Balanced intake
       `;
     }
 
     setPlan({
-      dietPlan,
-      calories,
+      calories: targetCalories,
       protein,
       carbs,
       fats,
-      explanation
+      explanation,
+      meals
     });
-  };
+
+  }, [goal, location]);
+
+  useEffect(() => {
+    if (!location.state?.type) return;
+
+    let detectedGoal = "";
+
+    if (location.state.type === "high") detectedGoal = "gain";
+    if (location.state.type === "moderate") detectedGoal = "maintain";
+    if (location.state.type === "low") detectedGoal = "loss";
+
+    setGoal(detectedGoal);
+    calculateDiet(detectedGoal);
+
+    // eslint-disable-next-line
+  }, []);
 
   const styles = {
     page: {
@@ -124,7 +133,7 @@ Maintain:
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      fontFamily: "Arial"
+      fontFamily: "'Manrope', sans-serif"
     },
 
     container: {
@@ -137,10 +146,6 @@ Maintain:
       textAlign: "center"
     },
 
-    title: {
-      marginBottom: "20px"
-    },
-
     select: {
       padding: "10px",
       width: "100%",
@@ -150,13 +155,17 @@ Maintain:
     },
 
     button: {
-      padding: "12px",
+      padding: "14px 28px",
       width: "100%",
-      borderRadius: "8px",
+      borderRadius: "999px",
       border: "none",
-      background: "#3498db",
-      color: "white",
-      cursor: "pointer"
+      background: "white",
+      color: "#333",
+      fontWeight: "600",
+      cursor: "pointer",
+      fontFamily: "'Manrope', sans-serif",
+      boxShadow: "0 6px 15px rgba(0,0,0,0.15)",
+      transition: "all 0.2s ease"
     },
 
     card: {
@@ -167,14 +176,7 @@ Maintain:
       textAlign: "left"
     },
 
-    macros: {
-      marginTop: "10px",
-      padding: "10px",
-      background: "#eef3ff",
-      borderRadius: "8px"
-    },
-
-    plan: {
+    meals: {
       marginTop: "15px",
       whiteSpace: "pre-line"
     }
@@ -184,7 +186,7 @@ Maintain:
     <div style={styles.page}>
       <div style={styles.container}>
 
-        <h1 style={styles.title}>Diet Plan Generator</h1>
+        <h1>Smart Diet Calculator</h1>
 
         <select
           style={styles.select}
@@ -197,28 +199,29 @@ Maintain:
           <option value="maintain">Maintenance</option>
         </select>
 
-        <button onClick={generatePlan} disabled={!goal}>
-          Generate Plan
+        <button
+          style={styles.button}
+          onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          onClick={() => calculateDiet()}
+        >
+          Recalculate
         </button>
 
         {plan && (
           <div style={styles.card}>
 
-            <h3>Diet Analysis</h3>
+            <h3>Calorie Analysis</h3>
             <p>{plan.explanation}</p>
 
-            <div style={styles.macros}>
-              <strong>Daily Targets:</strong>
-              <p>Calories: {plan.calories}</p>
-              <p>Protein: {plan.protein}</p>
-              <p>Carbs: {plan.carbs}</p>
-              <p>Fats: {plan.fats}</p>
-            </div>
+            <h4>Daily Targets</h4>
+            <p><b>Calories:</b> {plan.calories} kcal</p>
+            <p><b>Protein:</b> {plan.protein} g</p>
+            <p><b>Carbs:</b> {plan.carbs} g</p>
+            <p><b>Fats:</b> {plan.fats} g</p>
 
-            <div style={styles.plan}>
-              <h4>Recommended Plan</h4>
-              <p>{plan.dietPlan}</p>
-            </div>
+            <h4>Recommended Meals</h4>
+            <p style={styles.meals}>{plan.meals}</p>
 
           </div>
         )}

@@ -14,6 +14,6 @@ code {
     monospace;
 }
 
-* {
-  font-family: 'Manrope', sans-serif !important;
+body {
+  font-family: 'Manrope', sans-serif;
 }
