@@ -288,17 +288,17 @@ ${data.recommendation}
               </div>
 
               <div style={styles.inputGroup}>
-                <label>Max BPM</label>
+                <label>Max Heart Rate (BPM)</label>
                 <input type="number" name="Max_BPM" value={formData.Max_BPM} style={styles.input} onChange={handleChange} />
               </div>
 
               <div style={styles.inputGroup}>
-                <label>Resting BPM</label>
+                <label>Resting Heart Rate (BPM)</label>
                 <input type="number" name="Resting_BPM" value={formData.Resting_BPM} style={styles.input} onChange={handleChange} />
               </div>
 
               <div style={styles.inputGroup}>
-                <label>Avg BPM</label>
+                <label>Average Heart Rate (BPM)</label>
                 <input type="number" name="Avg_BPM" value={formData.Avg_BPM} style={styles.input} onChange={handleChange} />
               </div>
             </div>
