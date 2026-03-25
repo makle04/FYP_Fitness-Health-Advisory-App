@@ -257,7 +257,6 @@ ${data.recommendation}
         <div style={styles.container}>
 
           <h1 style={styles.title}>Fitness Advisory System</h1>
-
           <form onSubmit={handleSubmit}>
 
             <div style={styles.section}>Personal Info</div>

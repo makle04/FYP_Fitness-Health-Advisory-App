@@ -54,13 +54,7 @@ def predict():
 
     # Scale features
 # Scale features
-    X_scaled = scaler.transform(df[FEATURES])
-
-    # Restore feature names
-    X_scaled = pd.DataFrame(X_scaled, columns=FEATURES)
-
-    # Predict cluster
-    cluster = model.predict(X_scaled)[0]
+    cluster = model.predict(df[FEATURES])[0]
 
     df["cluster"] = cluster
 
