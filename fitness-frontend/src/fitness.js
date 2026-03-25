@@ -29,7 +29,6 @@ function Fitness() {
     setTimeout(() => setPageLoading(false), 1600);
   }, []);
 
-  // 🔥 UPDATED: only allow numeric input
   const handleChange = (e) => {
     const { name, value } = e.target;
 

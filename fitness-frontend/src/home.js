@@ -136,8 +136,14 @@ function Home() {
     },
 
     section: {
-      marginTop: "180px",
-      paddingTop: "100px",
+      marginTop: "100px",
+      paddingTop: "60px",
+      textAlign: "center"
+    },
+
+    section2: {
+      marginTop: "10px",
+      paddingTop: "30px",
       textAlign: "center"
     },
 
@@ -231,9 +237,8 @@ function Home() {
             </div>
           </div>
         </div>
-
-        <div style={styles.section}>
-          <h2>Real Impact</h2>
+      <div style={styles.section2}>
+          <h2>Start Your Fitness Journey Today</h2>
 
           <div style={styles.grid}>
             <div>
@@ -251,10 +256,7 @@ function Home() {
               <div style={styles.smallText}>Personalized</div>
             </div>
           </div>
-        </div>
-
-        <div style={styles.section}>
-          <h2>Start Your Fitness Journey Today</h2>
+          
           <div style={{ marginTop: "20px", display: "flex", justifyContent: "center", gap: "20px" }}>
             <button
               style={styles.button}
