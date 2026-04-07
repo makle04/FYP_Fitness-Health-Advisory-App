@@ -88,15 +88,15 @@ function Fitness() {
       const data = await response.json();
 
       const explanation = `
+      Recommended AI Plan:
+${data.recommendation}
+      
 You fall into a ${intensity.toLowerCase()} intensity fitness profile based on your heart rate patterns.
 
 Your hydration level is ${hydration.toLowerCase()}, and your BMI is ${bmi} (${bmiCategory} range).
 
 This suggests your current training load is ${intensity.toLowerCase()} and your recovery condition is ${hydration.toLowerCase()}.
-
-Recommended Plan:
-${data.recommendation}
-      `;
+`;
 
       setResult({
         ...data,
