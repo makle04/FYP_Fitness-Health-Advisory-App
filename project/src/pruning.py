@@ -15,18 +15,11 @@ def prune_unrealistic_records(df):
         "Water_Intake_liters"
     ]
 
-    # ---------------------------------
-    # Force numeric conversion
-    # ---------------------------------
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    # Drop rows with missing critical values
     df = df.dropna(subset=numeric_cols)
 
-    # ---------------------------------
-    # Physiological pruning rules
-    # ---------------------------------
     df = df[
         (df["Age"].between(16, 80)) &
         (df["Resting_BPM"].between(30, 120)) &
@@ -39,9 +32,6 @@ def prune_unrealistic_records(df):
         (df["Weight_kg"] > 0)
     ]
 
-    # ---------------------------------
-    # Enforce heart rate consistency
-    # ---------------------------------
     df = df[
         (df["Resting_BPM"] < df["Avg_BPM"]) &
         (df["Avg_BPM"] < df["Max_BPM"])
