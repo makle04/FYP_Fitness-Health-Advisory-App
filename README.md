@@ -148,7 +148,7 @@ Fitness Health Advisory API Running
 In a separate terminal, navigate to the `frontend/` directory:
 
 ```bash
-cd frontend
+cd fitness-frontend
 npm start
 ```
 
