@@ -273,7 +273,3 @@ The system maps each of the 14 identified clusters to a personalised fitness rec
 This project was developed as a Final Year Project (FYP) dissertation for the degree B.Sc. Computer Science with Artificial Intelligence (Hons) at the University of Nottingham Malaysia Campus, submitted in April 2026.
 
 ---
-
-## License
-
-This project is submitted for academic assessment purposes only. All code is original work by Joshua Mak Le (Student ID: 20469457) except where explicitly indicated in the dissertation report.
