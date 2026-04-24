@@ -167,48 +167,50 @@ The interface is designed to be simple and intuitive for ease of use.
 
 ---
 
-## 10. Installation Guide  
+## 10. Installation and Setup  
 
-### 10.1 Clone Repository  
-
-```bash
-git clone https://github.com/your-username/FYP_Fitness-Health-Advisory-App.git
-cd FYP_Fitness-Health-Advisory-App
-```
-
-### 10.2 Backend Setup  
+### 10.1 Install Dependencies  
 
 ```bash
-pip install -r requirements.txt
-```
-
-### 10.3 Frontend Setup  
-
-```bash
-cd fitness-frontend
-npm install
+pip install -r project/requirements.txt
 ```
 
 ---
 
 ## 11. Running the System  
 
-### 11.1 Start Backend  
+### 11.1 (Optional) Train the Model  
+
+If you would like to retrain the clustering model:
 
 ```bash
-python main.py
+python project/main.py
 ```
 
-### 11.2 Start Frontend  
+This step generates the trained model files used for prediction.
+
+---
+
+### 11.2 Start Backend API  
+
+```bash
+python project/api.py
+```
+
+---
+
+### 11.3 Start Frontend  
+
+Open a new terminal and run:
 
 ```bash
 cd fitness-frontend
 npm start
 ```
 
-The application will run on a local development server and can be accessed through a web browser.
-
 ---
+
+The application will be accessible via the local development server after both backend and frontend are running.
 
 ## 12. Dataset Description  
 
