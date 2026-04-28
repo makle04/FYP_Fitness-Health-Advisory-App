@@ -1,6 +1,9 @@
 # FitSense AI  
-Clustering and Personalised Advisory System for Fitness and Healthy Lifestyle  
+Clustering and Personalised Advisory System for Fitness and Healthy Lifestyle
 
+```
+Github Link: https://github.com/makle04/FYP_Fitness-Health-Advisory-App
+```
 ## 1. Introduction  
 
 FitSense AI is an intelligent fitness advisory system developed as a Final Year Project. The system applies unsupervised machine learning techniques to analyse fitness-related data and generate personalised workout and dietary recommendations. Unlike traditional rule-based systems, FitSense AI identifies hidden patterns within user data to group individuals into meaningful fitness archetypes.
