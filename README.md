@@ -1,8 +1,9 @@
 # FitSense AI  
 Clustering and Personalised Advisory System for Fitness and Healthy Lifestyle
 
+Github Link:
 ```
-Github Link: https://github.com/makle04/FYP_Fitness-Health-Advisory-App
+https://github.com/makle04/FYP_Fitness-Health-Advisory-App
 ```
 ## 1. Introduction  
 
