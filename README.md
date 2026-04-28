@@ -192,9 +192,9 @@ python project/main.py
 ```
 
 This step generates the trained model files used for prediction.
-
+```bash
 The model used during execution may not be identical to the version presented in this report, as retraining can produce slight variations in clustering results due to the stochastic nature of the algorithms and differences in the computational environment.
-
+```
 ---
 
 ### 11.2 Start Backend API  
