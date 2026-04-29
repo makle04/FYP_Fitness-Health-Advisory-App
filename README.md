@@ -77,10 +77,10 @@ FitSense AI operates through a multi-stage pipeline:
 FYP_Fitness-Health-Advisory-App/
 │
 ├── project/
-    ├── api.py
-    ├── main.py
-    ├── requirements.txt
-    └── README.md
+|   ├── api.py
+|   ├── main.py
+|   ├── requirements.txt
+|   ├── README.md
 │   ├── data/
 │   │   ├── gym_members_exercise_tracking_synthetic_data.csv
 │   │   └── output_with_activity_levels.csv
@@ -176,6 +176,10 @@ The interface is designed to be simple and intuitive for ease of use.
 ---
 
 ## 10. Installation and Setup  
+
+```
+Reminder to open to the inner file of JoshuaMakLe_20469457_Software after unzipping file in VS Code
+```
 
 ### 10.1 Install Dependencies  
 
