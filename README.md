@@ -187,7 +187,7 @@ pip install -r project/requirements.txt
 
 ## 11. Running the System  
 
-### 11.1 (Optional) Train the Model  
+### 11.1 (Optional) Re-Train the Model  
 
 If you would like to retrain the clustering model:
 
@@ -215,6 +215,7 @@ Open a new terminal and run:
 
 ```bash
 cd fitness-frontend
+npm install
 npm start
 ```
 
