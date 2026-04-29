@@ -77,6 +77,10 @@ FitSense AI operates through a multi-stage pipeline:
 FYP_Fitness-Health-Advisory-App/
 │
 ├── project/
+    ├── api.py
+    ├── main.py
+    ├── requirements.txt
+    └── README.md
 │   ├── data/
 │   │   ├── gym_members_exercise_tracking_synthetic_data.csv
 │   │   └── output_with_activity_levels.csv
@@ -98,10 +102,6 @@ FYP_Fitness-Health-Advisory-App/
 │       ├── App.js
 │       ├── home.js
 │       ├── fitness.js
-│
-├── main.py
-├── requirements.txt
-└── README.md
 ```
 
 ---
